@@ -1,6 +1,17 @@
 import db from '../../firebase';
 import { Note } from './types';
 
+const parseJSON = (str: string) => {
+  if (!str) {
+    return undefined;
+  }
+
+  try {
+    return JSON.parse(str);
+  } catch (e) {
+    return undefined;
+  }
+}
 
 const noteConverter = {
   toFirestore: (note: Omit<Note, 'id'> & { id?: string }): FirebaseFirestore.DocumentData => ({
@@ -13,9 +24,9 @@ const noteConverter = {
   ): Note => {
     const data = snapshot.data();
     return {
-      id: data.id,
+      id: snapshot.id,
       title: data.title,
-      content: data.content
+      content: parseJSON(data.content),
     };
   }
 };
@@ -33,7 +44,6 @@ export default class NotesService {
 
     return doc.data()!;
   }
-
 
   async getNotes(fields: Array<keyof Note>): Promise<Pick<Note, typeof fields[number]>[]> {
     const result = await notesRef

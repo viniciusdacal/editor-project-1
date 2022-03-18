@@ -1,5 +1,7 @@
+import { Descendant } from 'slate'
+
 export type Note = {
   id: string;
   title: string;
-  content: string;
+  content: Array<Descendant>;
 }
