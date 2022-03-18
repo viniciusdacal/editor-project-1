@@ -1,5 +1,5 @@
 import express from 'express'
-import notesRouter from './notes'
+import notesRouter from './packages/notes/routes'
 
 const router = express.Router()
 
