@@ -5,8 +5,8 @@
     "apps/*"
   ],
   "scripts": {
-    "frontend:dev": "npm run dev -w frontend",
-    "backend:dev": "npm run dev -w backend",
+    "frontend:dev": "npm run dev -w @mochary/frontend",
+    "backend:dev": "npm run dev -w @mochary/backend",
     "dev": "run-p frontend:dev backend:dev"
   },
   "resolutions": {
