@@ -1,17 +1,10 @@
+import { Descendant } from 'slate'
 import db from '../../firebase';
-import { Note } from './types';
+import { parseJSON } from '../../shared/utils';
+import * as SharedTypes from '../../shared/types';
 
-const parseJSON = (str: string) => {
-  if (!str) {
-    return undefined;
-  }
 
-  try {
-    return JSON.parse(str);
-  } catch (e) {
-    return undefined;
-  }
-}
+type Note = SharedTypes.Notes.Note;
 
 const noteConverter = {
   toFirestore: (note: Omit<Note, 'id'> & { id?: string }): FirebaseFirestore.DocumentData => ({
@@ -26,7 +19,7 @@ const noteConverter = {
     return {
       id: snapshot.id,
       title: data.title,
-      content: parseJSON(data.content),
+      content: (parseJSON<Descendant[]>(data.content) || []) as Descendant[],
     };
   }
 };
