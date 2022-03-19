@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useEffect } from 'react'
 import useSWR from 'swr'
-import { NotesResponse, NoteResponse } from '../../../backend/routes/notes'
+import * as SharedTypes from "@mochary/backend/shared/types";
+import { parseJSON } from '@mochary/backend/shared/utils';
 import useWebSocket, { ReadyState } from 'react-use-websocket'
 
 // If you want to use GraphQL API or libs like Axios, you can create your own fetcher function. 
@@ -15,7 +16,7 @@ const fetcher = async (
 }
 
 export const useNotesList = () => {
-  const { data, error } = useSWR<NotesResponse>('http://localhost:3001/api/notes', fetcher)
+  const { data, error } = useSWR<SharedTypes.Notes.NotesResponse>('http://localhost:3001/api/notes', fetcher)
 
   return {
     notesList: data?.notes,
@@ -25,18 +26,20 @@ export const useNotesList = () => {
 }
 
 export const useNote = (id: string) => {
-  const { readyState, lastMessage, sendMessage } = useWebSocket(`ws://localhost:3001/api/notes/${id}`)
+  const { readyState, lastMessage, sendJsonMessage } = useWebSocket(`ws://localhost:3001/api/notes/${id}`)
 
   // Send a message when ready on first load
   useEffect(() => {
     if (readyState === ReadyState.OPEN && lastMessage === null) {
-      sendMessage('')
+      sendJsonMessage({
+        type: SharedTypes.Notes.NoteActionType.READ,
+      });
     }
   }, [readyState, lastMessage])
   
 
   return {
-    note: lastMessage && JSON.parse(lastMessage.data) as NoteResponse,
+    note: parseJSON<SharedTypes.Notes.NotesResponse>(lastMessage?.data),
     readyState,
   }
 }

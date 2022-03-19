@@ -1,6 +1,7 @@
 import express, { RequestHandler, Response } from 'express'
 import { WebsocketRequestHandler } from 'express-ws'
-import { Note } from './types';
+import { parseJSON } from '../../shared/utils';
+import * as SharedTypes from '../../shared/types';
 
 import NotesService from './notes.service';
 
@@ -17,32 +18,39 @@ const notesService = new NotesService();
 
 interface NotesHandlers {
   getNotes: RequestHandler;
-  getNote: WebsocketRequestHandler;
-}
-
-interface NotesResponse {
-  notes: Note[];
+  note: WebsocketRequestHandler;
 }
 
 const handlers: NotesHandlers = {
-  getNotes: async (_req, res: Response<NotesResponse>) => {
+  getNotes: async (_req, res: Response<SharedTypes.Notes.NotesResponse>) => {
     const notes = await notesService.getNotes(['id', 'title']);
     
     res.json({
       notes: notes,
     })
   },
-  getNote: (ws, req) => {
-    ws.on('message', async () => {
-      const note = await notesService.getNote(req.params.id);
-      ws.send(JSON.stringify(note));
+  note: (ws, req) => {
+    ws.on('message', async (data) => {
+      const action = parseJSON<SharedTypes.Notes.NoteAction>(data.toString()) as SharedTypes.Notes.NoteAction;
+
+      if (!action.type) {
+        console.log(`wrong message format, expect a NoteAction, got: ${data}`)
+        return;
+      }
+
+      switch(action.type) {
+        case SharedTypes.Notes.NoteActionType.READ: {
+          const note = await notesService.getNote(req.params.id);
+          ws.send(JSON.stringify(note));
+          break;
+        }
+      }
+      
     })
-  }
+  },
 };
 
-
-
 router.get('/', handlers.getNotes)
-router.ws('/:id', handlers.getNote)
+router.ws('/:id', handlers.note)
 
 export default router
