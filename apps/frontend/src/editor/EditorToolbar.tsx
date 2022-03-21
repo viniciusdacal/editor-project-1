@@ -1,11 +1,24 @@
-import React, { MouseEventHandler } from 'react'
-import { useSlate } from 'slate-react'
+import React, { MouseEventHandler } from 'react';
+import { useSlate } from 'slate-react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { toggleBlock, toggleMark, isBlockActive, isMarkActive } from './helpers'
-import { CustomElementType } from './CustomElement'
-import { CustomText } from './CustomLeaf'
-import { FormatBold, FormatItalic, FormatUnderlined, Code, FormatListNumbered, FormatListBulleted, FormatQuote } from '@mui/icons-material';
+import {
+  toggleBlock,
+  toggleMark,
+  isBlockActive,
+  isMarkActive,
+} from './helpers';
+import { CustomElementType } from './CustomElement';
+import { CustomText } from './CustomLeaf';
+import {
+  FormatBold,
+  FormatItalic,
+  FormatUnderlined,
+  Code,
+  FormatListNumbered,
+  FormatListBulleted,
+  FormatQuote,
+} from '@mui/icons-material';
 
 const iconMap: Record<string, React.FC> = {
   bold: FormatBold,
@@ -15,7 +28,7 @@ const iconMap: Record<string, React.FC> = {
   list_numbered: FormatListNumbered,
   list_bulleted: FormatListBulleted,
   quote: FormatQuote,
-}
+};
 
 const Icon: React.FC<{ name: string }> = ({ name }) => {
   const Component = iconMap[name];
@@ -24,34 +37,33 @@ const Icon: React.FC<{ name: string }> = ({ name }) => {
     return <span>{name}</span>;
   }
 
-  return  <Component />
-}
+  return <Component />;
+};
 
 interface BlockButtonProps {
-  format: CustomElementType
-  icon: string
+  format: CustomElementType;
+  icon: string;
 }
 
 const BlockButton: React.FC<BlockButtonProps> = ({ format, icon }) => {
-  const editor = useSlate()
+  const editor = useSlate();
   return (
     <Button
       variant={isBlockActive(editor, format) ? 'contained' : 'outlined'}
       onMouseDown={(event) => {
-        event.preventDefault()
-        toggleBlock(editor, format)
+        event.preventDefault();
+        toggleBlock(editor, format);
       }}
     >
       <Icon name={icon} />
     </Button>
-  )
-}
+  );
+};
 
 interface MarkButtonProps {
-  format: keyof CustomText
-  icon: string
+  format: keyof CustomText;
+  icon: string;
 }
-
 
 const MarkButton: React.FC<MarkButtonProps> = ({ format, icon }) => {
   const editor = useSlate();
@@ -59,14 +71,14 @@ const MarkButton: React.FC<MarkButtonProps> = ({ format, icon }) => {
     <Button
       variant={isMarkActive(editor, format) ? 'contained' : 'outlined'}
       onMouseDown={(event) => {
-        event.preventDefault()
-        toggleMark(editor, format)
+        event.preventDefault();
+        toggleMark(editor, format);
       }}
     >
       <Icon name={icon} />
     </Button>
   );
-}
+};
 
 export const EditorToolbar: React.FC = () => {
   return (
@@ -82,10 +94,16 @@ export const EditorToolbar: React.FC = () => {
           <BlockButton format={CustomElementType.headingOne} icon="h1" />
           <BlockButton format={CustomElementType.headingTwo} icon="h2" />
           <BlockButton format={CustomElementType.blockQuote} icon="quote" />
-          <BlockButton format={CustomElementType.numberedList} icon="list_numbered" />
-          <BlockButton format={CustomElementType.bulletedList} icon="list_bulleted" />
+          <BlockButton
+            format={CustomElementType.numberedList}
+            icon="list_numbered"
+          />
+          <BlockButton
+            format={CustomElementType.bulletedList}
+            icon="list_bulleted"
+          />
         </Stack>
       </Stack>
     </div>
-  )
-}
+  );
+};

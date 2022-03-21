@@ -8,4 +8,4 @@ export const parseJSON = <T>(str: string): string | T => {
   } catch (e) {
     return str;
   }
-}
+};

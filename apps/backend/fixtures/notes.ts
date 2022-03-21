@@ -1,4 +1,4 @@
-import { Descendant } from 'slate'
+import { Descendant } from 'slate';
 
 export const NOTE_1 = {
   id: 'n1',
@@ -20,8 +20,8 @@ export const NOTE_1 = {
       type: 'list-item',
       children: [{ text: 'Call mom about vacation' }],
     },
-  ] as unknown as Array<Descendant>
-}
+  ] as unknown as Array<Descendant>,
+};
 
 export const NOTE_2 = {
   id: 'n2',
@@ -43,13 +43,11 @@ export const NOTE_2 = {
       type: 'paragraph',
       children: [
         {
-          text:
-            "Since it's rich text, you can do things like turn a selection of text ",
+          text: "Since it's rich text, you can do things like turn a selection of text ",
         },
         { text: 'bold', bold: true },
         {
-          text:
-            ', or add a semantically rendered block quote in the middle of the page, like this:',
+          text: ', or add a semantically rendered block quote in the middle of the page, like this:',
         },
       ],
     },
@@ -65,5 +63,5 @@ export const NOTE_2 = {
       type: 'paragraph',
       children: [{ text: 'Try it out for yourself!' }],
     },
-  ] as unknown as Array<Descendant>
-}
+  ] as unknown as Array<Descendant>,
+};

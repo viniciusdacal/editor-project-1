@@ -1,12 +1,12 @@
-import React from 'react'
-import { Editor } from '../editor'
-import { useNote } from './hooks'
+import React from 'react';
+import { Editor } from '../editor';
+import { useNote } from './hooks';
 import { SocketStatus } from '../useSocketIO';
 
-import { Paper, TextField, Badge, BadgeTypeMap } from '@mui/material'
+import { Paper, TextField, Badge, BadgeTypeMap } from '@mui/material';
 
 interface SingleNoteProps {
-  id: string
+  id: string;
 }
 
 const Home: React.FC<SingleNoteProps> = ({ id }) => {
@@ -18,7 +18,7 @@ const Home: React.FC<SingleNoteProps> = ({ id }) => {
     [SocketStatus.CLOSING]: 'warning',
     [SocketStatus.CLOSED]: 'error',
     [SocketStatus.UNINSTANTIATED]: 'error',
-  }[status] as BadgeTypeMap['props']['color']
+  }[status] as BadgeTypeMap['props']['color'];
 
   return note ? (
     <>
@@ -41,7 +41,7 @@ const Home: React.FC<SingleNoteProps> = ({ id }) => {
         <Editor editor={editor} initialValue={note.content} />
       </Paper>
     </>
-  ) : null
-}
+  ) : null;
+};
 
-export default Home
+export default Home;
