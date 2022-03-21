@@ -1,1 +1,1 @@
-export * as Notes from './Notes'
+export * as Notes from './Notes';
