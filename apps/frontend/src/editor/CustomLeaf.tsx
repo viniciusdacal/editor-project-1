@@ -7,6 +7,7 @@ export interface CustomText extends BaseText {
   code?: boolean
   italic?: boolean
   underline?: boolean
+  strikethrough?: boolean
 }
 
 export const CustomLeaf: React.FC<RenderLeafProps> = ({ attributes, children, leaf }) => {
@@ -24,6 +25,10 @@ export const CustomLeaf: React.FC<RenderLeafProps> = ({ attributes, children, le
 
   if (leaf.underline) {
     children = <u>{children}</u>
+  }
+
+  if (leaf.strikethrough) {
+    children = <del>{children}</del>
   }
 
   return <span {...attributes}>{children}</span>

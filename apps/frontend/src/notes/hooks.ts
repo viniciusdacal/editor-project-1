@@ -63,26 +63,11 @@ export const useNote = (id: string) => {
     let promise: null | Promise<void> = null;
 
     return withCollaboration(createEditor(), async (operation) => {
-      console.log('sent', operation);
-
-      if (
-        ![
-          'insert_text',
-          'remove_text',
-          'remove_node',
-          'split_node',
-          'set_node',
-          'merge_node',
-        ].includes(operation.type)
-      ) {
-        console.log('falta na lista', operation.type);
-      }
-
       if (operation.type !== 'set_selection') {
         batch.push(operation);
       }
 
-      if (promise) {
+      if (promise || !batch.length) {
         return;
       }
 

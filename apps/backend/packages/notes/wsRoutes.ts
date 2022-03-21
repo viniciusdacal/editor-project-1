@@ -1,11 +1,9 @@
 import { Socket } from 'socket.io';
-import Slate, { createEditor, Editor } from 'slate';
-import Automerge from 'automerge';
+import { createEditor, Editor } from 'slate';
 import {
   NoteWSEventTypes,
   ReadNoteWSEvent,
   NewOperationNoteWSEvent,
-  Note,
 } from '../../shared/types/Notes';
 import NotesService from './notes.service';
 
@@ -30,7 +28,7 @@ export default function initialize(socket: Socket) {
   });
 
   const promises = new Map<string, Promise<void>>();
-  const operations = [];
+
   socket.on(
     NoteWSEventTypes.NEW_OPERATIONS,
     async (event: NewOperationNoteWSEvent) => {
