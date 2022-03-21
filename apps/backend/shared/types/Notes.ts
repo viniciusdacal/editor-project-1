@@ -1,4 +1,4 @@
-import { Descendant } from 'slate';
+import { Descendant, Operation } from 'slate';
 
 export interface Note {
   id: string;
@@ -15,10 +15,40 @@ export enum NoteActionType {
   CREATE = 'note:create',
   READ = 'note:read',
   UPDATE = 'note:update',
+  REPLACE = 'note:replace',
 }
 
-export interface NoteAction {
+export interface NoteAction<T = string> {
   type: NoteActionType;
-  message?: string;
+  message?: T;
 }
 
+export enum NoteWSEventTypes {
+  READ_NOTE = 'notes:read',
+  REPLACE = 'notes:replace',
+  UPDATE = 'notes:update',
+  NEW_OPERATIONS = 'notes:NEW_OPERATIONS',
+}
+
+export interface WSEvent<ET = string, P = any> {
+  type: ET;
+  payload: P;
+}
+
+export type ReadNoteWSEvent = WSEvent<
+  NoteWSEventTypes,
+  {
+    id: string;
+  }
+>;
+
+export type ReplaceNoteWSEvent = WSEvent<NoteWSEventTypes.REPLACE, Note>;
+export type UpdateNoteWSEvent = WSEvent<
+  NoteWSEventTypes.UPDATE,
+  { id: string } & Partial<Note>
+>;
+
+export type NewOperationNoteWSEvent = WSEvent<
+  NoteWSEventTypes.NEW_OPERATIONS,
+  { id: string; operations: Operation[] }
+>;

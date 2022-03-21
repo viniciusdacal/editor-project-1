@@ -1,7 +1,7 @@
 import React from 'react'
 import { Editor } from '../editor'
 import { useNote } from './hooks'
-import { ReadyState } from 'react-use-websocket'
+import { SocketStatus } from '../useSocketIO';
 
 import { Paper, TextField, Badge, BadgeTypeMap } from '@mui/material'
 
@@ -10,15 +10,15 @@ interface SingleNoteProps {
 }
 
 const Home: React.FC<SingleNoteProps> = ({ id }) => {
-  const { note, readyState } = useNote(id)
+  const { note, editor, status } = useNote(id);
 
   const connectionStatusColor = {
-    [ReadyState.CONNECTING]: 'info',
-    [ReadyState.OPEN]: 'success',
-    [ReadyState.CLOSING]: 'warning',
-    [ReadyState.CLOSED]: 'error',
-    [ReadyState.UNINSTANTIATED]: 'error',
-  }[readyState] as BadgeTypeMap['props']['color']
+    [SocketStatus.CONNECTING]: 'info',
+    [SocketStatus.OPEN]: 'success',
+    [SocketStatus.CLOSING]: 'warning',
+    [SocketStatus.CLOSED]: 'error',
+    [SocketStatus.UNINSTANTIATED]: 'error',
+  }[status] as BadgeTypeMap['props']['color']
 
   return note ? (
     <>
@@ -38,7 +38,7 @@ const Home: React.FC<SingleNoteProps> = ({ id }) => {
           flexDirection: 'column',
         }}
       >
-        <Editor initialValue={note.content} />
+        <Editor editor={editor} initialValue={note.content} />
       </Paper>
     </>
   ) : null
