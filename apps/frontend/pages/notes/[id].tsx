@@ -7,8 +7,7 @@ import { SingleNote } from '../../src/notes'
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const { id } = router.query
-  const noteId = String(id)
+  const { id } = router.query as { id: string | undefined }
 
   return (
     <>
@@ -16,8 +15,8 @@ const Home: NextPage = () => {
         <title>Editor Project</title>
       </Head>
 
-      <Interface activeNoteId={noteId}>
-        {noteId ? <SingleNote id={noteId} key={noteId} /> : null}
+      <Interface activeNoteId={id}>
+        {id ? <SingleNote id={id} key={id} /> : null}
       </Interface>
     </>
   )
